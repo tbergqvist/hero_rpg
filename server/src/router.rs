@@ -16,28 +16,22 @@ extern crate serde;
 pub struct Route {
   pub path: &'static str,
   pub method: Method,
-  pub callback: Box<Fn (Request, &Router) -> BoxFuture<Response, hyper::Error>>
+  pub callback: fn (Request) -> BoxFuture<Response, hyper::Error>
 }
 
 pub struct Router {
-  quests_endpoint: quests_endpoint::QuestsEndpoint,
-  root_endpoint: root_endpoint::RootEndpoint,
   routes: Vec<Route>
 }
 
 impl Router {
   pub fn new() -> Router {
-    let quests_endpoint = quests_endpoint::QuestsEndpoint{};
-    let root_endpoint = root_endpoint::RootEndpoint{};
-
     Router {
       routes: vec![
-        Route { path: "/quests", method: Method::Get, callback: Box::new(|request, router|router.quests_endpoint.get_quests(request)) },
-        Route { path: "/", method: Method::Get, callback: Box::new(|request, router|router.root_endpoint.get_root(request)) },
-        Route { path: "/user", method: Method::Post, callback: Box::new(|request, router|router.root_endpoint.post_user(request)) }
+        Route { path: "/quests", method: Method::Get, callback: quests_endpoint::get_quests },
+        Route { path: "/quests/1", method: Method::Post, callback: quests_endpoint::accept_quest },
+        Route { path: "/", method: Method::Get, callback: root_endpoint::get_root },
+        Route { path: "/user", method: Method::Post, callback: root_endpoint::post_user }
       ],
-      quests_endpoint: quests_endpoint,
-      root_endpoint: root_endpoint,
     }
   }
 
@@ -54,11 +48,10 @@ impl Router {
 
     for route in &self.routes {
       if request.path() == route.path && request.method() == &route.method {
-        let response: BoxFuture<Response, hyper::Error> = (route.callback)(request, &self);
+        let response: BoxFuture<Response, hyper::Error> = (route.callback)(request);
         return Box::new(response.and_then(|response|{
           Ok(response.with_header(AccessControlAllowOrigin::Any))
         }));
-        //return response.with_header(AccessControlAllowOrigin::Any);
       }
     }
 
