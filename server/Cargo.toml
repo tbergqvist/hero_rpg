@@ -1,0 +1,12 @@
+[package]
+name = "hero_rpg"
+version = "0.1.0"
+authors = ["Tim Bergqvist <boggeb@gmail.com>"]
+
+[dependencies]
+hyper = "0.11"
+futures = "0.1.14"
+serde_derive = "1.0.11"
+serde_json = "1.0"
+serde = "1.0.11"
+unicase = "2.0.0"

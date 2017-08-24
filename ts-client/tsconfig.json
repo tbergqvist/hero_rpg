@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+      "target": "es6",
+      "module": "system",
+      "sourceMap": true, 
+      "experimentalDecorators": true, 
+      "emitDecoratorMetadata": true,
+      "jsx": "react",
+      "reactNamespace": "GuiLib"
+  },
+  "include": [
+      "src/**/*",
+      "typings/**/*"
+  ]
+}
