@@ -3,9 +3,8 @@ extern crate futures;
 extern crate serde;
 extern crate serde_json;
 
-mod quests_endpoint;
+mod endpoints;
 mod router;
-mod root_endpoint;
 mod game_screen;
 mod http_method;
 

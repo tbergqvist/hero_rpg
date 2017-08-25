@@ -1,7 +1,6 @@
 extern crate unicase;
 
-use root_endpoint;
-use quests_endpoint;
+use endpoints::{quests_endpoint, root_endpoint};
 
 use futures;
 use futures::{Future, BoxFuture};
@@ -29,8 +28,8 @@ impl Router {
       routes: vec![
         Route { path: "/quests", method: Method::Get, callback: quests_endpoint::get_quests },
         Route { path: "/quests/1", method: Method::Post, callback: quests_endpoint::accept_quest },
-        Route { path: "/", method: Method::Get, callback: root_endpoint::get_root },
-        Route { path: "/user", method: Method::Post, callback: root_endpoint::post_user }
+        Route { path: "/", method: Method::Get, callback: root_endpoint::get_login_screen },
+        Route { path: "/user", method: Method::Post, callback: root_endpoint::login }
       ],
     }
   }
