@@ -14,7 +14,7 @@ pub fn get_login_screen() -> game_screen::GameScreen {
             value: game_screen::FieldValue::Text(None)
           }
         ],
-        link: String::from("http://localhost:4000/user"),
+        link: String::from("http://localhost:4000/login"),
       },
     )
   }

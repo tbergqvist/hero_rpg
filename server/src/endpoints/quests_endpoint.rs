@@ -1,26 +1,17 @@
-use hyper;
-use hyper::server::{Request, Response};
-use futures::BoxFuture;
-use futures;
 use endpoints::commands;
-use endpoints::shared;
+use game_screen;
+use rocket_contrib::Json;
 
-pub fn get_quests(_: Request) -> BoxFuture<Response, hyper::Error> {
-  Box::new(
-    futures::future::ok(
-      shared::to_json_response(
-        commands::get_quests::get_quests()
-      )
-    )
+#[get("/quests")]
+pub fn get_quests() -> Json<game_screen::GameScreen> {
+  Json(
+    commands::get_quests::get_quests()
   )
 }
 
-pub fn accept_quest(_: Request) -> BoxFuture<Response, hyper::Error> {
-  Box::new(
-    futures::future::ok(
-      shared::to_json_response(
-        commands::accept_quest::accept_quest()
-      )
-    )
+#[post("/quests/<id>")]
+pub fn accept_quest(id: i32) -> Json<game_screen::GameScreen> {
+  Json(
+    commands::accept_quest::accept_quest()
   )
 }
