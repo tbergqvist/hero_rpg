@@ -24,6 +24,7 @@ export class HttpClient {
   private sendData(method: string, url: string, body?: string, headers: Header[] = []) {
     return new Promise<{ content: any }>((resolve, reject) => {
       let requester = new XMLHttpRequest();
+      requester.withCredentials = true;
       requester.onreadystatechange = () => {
         if (requester.readyState === XMLHttpRequest.DONE) {
           if (requester.status === 200 || requester.status === 204) {

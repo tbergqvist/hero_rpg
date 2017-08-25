@@ -1,9 +1,10 @@
 use endpoints::commands;
 use game_screen;
 use rocket_contrib::Json;
+use player_state::PlayerState;
 
 #[get("/quests")]
-pub fn get_quests() -> Json<game_screen::GameScreen> {
+pub fn get_quests(player: PlayerState) -> Json<game_screen::GameScreen> {
   Json(
     commands::get_quests::get_quests()
   )

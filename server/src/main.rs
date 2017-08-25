@@ -11,16 +11,19 @@ extern crate serde_json;
 mod endpoints;
 mod game_screen;
 mod http_method;
+mod game_state;
+mod player_state;
 
 #[macro_use]
 extern crate serde_derive;
 
 use endpoints::{root_endpoint, quests_endpoint};
 
-
 fn main() {
-  let options = rocket_cors::Cors {
-    ..Default::default()
+  // You can also deserialize this
+  let cors = rocket_cors::Cors {
+      allow_credentials: true,
+      ..Default::default()
   };
 
   rocket::ignite()
@@ -30,6 +33,7 @@ fn main() {
       quests_endpoint::get_quests,
       quests_endpoint::accept_quest
     ])
-    .attach(options)
+    .attach(cors)
+    .manage(game_state::ThreadSafeGameState::new())
   .launch();
 }
