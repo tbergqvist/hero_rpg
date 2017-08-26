@@ -1,6 +1,7 @@
 use std::collections::HashMap;
+use std::sync::Arc;
 use std::sync::{RwLock, RwLockWriteGuard, RwLockReadGuard};
-use player_state::PlayerState;
+use player_state::{PlayerState};
 
 pub struct ThreadSafeGameState {
   pub game_state: RwLock<GameState>
@@ -21,7 +22,7 @@ impl ThreadSafeGameState {
 }
 
 pub struct GameState {
-  pub players: HashMap<String, PlayerState>
+  players: HashMap<String, Arc<RwLock<PlayerState>>>
 }
 
 impl GameState {
@@ -29,11 +30,16 @@ impl GameState {
     GameState{ players: HashMap::new() }
   }
 
-  pub fn login_player(&mut self, name: &str) -> &PlayerState {
-    self.players.entry(String::from(name)).or_insert(PlayerState::new())
+  pub fn login_player(&mut self, name: &str) -> Arc<RwLock<PlayerState>> {
+    let name = String::from(name);
+    let player_ptr = self.players.entry(name.clone()).or_insert(Arc::new(RwLock::new(PlayerState::new(name))));
+    return player_ptr.clone();
   }
 
-  pub fn get_player(&self, name: &str) -> Option<&PlayerState> {
-    self.players.get(name)
+  pub fn get_player(&self, name: &str) -> Option<Arc<RwLock<PlayerState>>> {
+    match self.players.get(name) {
+      Some(lock) => Some(lock.clone()),
+      None => None
+    }
   }
 }
