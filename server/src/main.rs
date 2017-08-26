@@ -13,6 +13,9 @@ mod game_screen;
 mod http_method;
 mod game_state;
 mod player_state;
+mod quest;
+mod enemy;
+mod thread_safe;
 
 #[macro_use]
 extern crate serde_derive;
@@ -29,11 +32,12 @@ fn main() {
   rocket::ignite()
     .mount("/", routes![
       root_endpoint::get_login_screen,
+      root_endpoint::get_village,
       root_endpoint::login,
       quests_endpoint::get_quests,
       quests_endpoint::accept_quest
     ])
     .attach(cors)
-    .manage(game_state::ThreadSafeGameState::new())
+    .manage(thread_safe::Ts::new(game_state::GameState::new()))
   .launch();
 }
