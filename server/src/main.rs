@@ -16,11 +16,14 @@ mod player_state;
 mod quest;
 mod enemy;
 mod thread_safe;
+mod config;
 
 #[macro_use]
 extern crate serde_derive;
 
 use endpoints::{root_endpoint, quests_endpoint};
+use rocket::fairing::AdHoc;
+
 
 fn main() {
   // You can also deserialize this
@@ -38,6 +41,14 @@ fn main() {
       quests_endpoint::accept_quest
     ])
     .attach(cors)
+    .attach(AdHoc::on_attach(|rocket| {
+      let config = {
+        let config = rocket.config();
+        let base_url = format!("http://{}:{}", config.address, config.port);
+        config::Config{base_url: base_url}
+      };
+      Ok(rocket.manage(config))
+    }))
     .manage(thread_safe::Ts::new(game_state::GameState::new()))
   .launch();
 }

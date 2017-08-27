@@ -53,7 +53,6 @@ impl<'a, 'r> FromRequest<'a, 'r> for TsPlayerState {
 
     fn from_request(request: &'a Request<'r>) -> request::Outcome<TsPlayerState, ()> {
         let cookies = request.guard::<Cookies>()?;
-        
         match cookies.get("id") {
           Some(cookie) => {
             let state = request.guard::<State<game_state::TsGameState>>()?;
@@ -65,7 +64,7 @@ impl<'a, 'r> FromRequest<'a, 'r> for TsPlayerState {
                 None => Outcome::Forward(())
             }
           },
-          None => Outcome::Failure((Status::ServiceUnavailable, ()))
+          None => Outcome::Forward(())
         }
     }
 }

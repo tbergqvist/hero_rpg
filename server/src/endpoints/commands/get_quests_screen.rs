@@ -3,15 +3,16 @@ use http_method::HttpMethod;
 use game_state::{TsGameState};
 use player_state::TsPlayerState;
 use quest::Quest;
+use config::Config;
 
-pub fn get_quests_screen(game_state: &TsGameState, player_state: &TsPlayerState) -> game_screen::GameScreen {
+pub fn get_quests_screen(game_state: &TsGameState, player_state: &TsPlayerState, config: &Config) -> game_screen::GameScreen {
   let quests = get_acceptable_quests(&game_state, &player_state);
 
   let actions = quests.iter().map(|quest| {
     game_screen::GameAction {
       name: quest.name().clone(),
       method: HttpMethod::Post,
-      link: format!("http://localhost:4000/quests/{}", quest.id()),
+      link: format!("{}/quests/{}", config.base_url, quest.id()),
       fields: vec![]
     }
   }).collect();

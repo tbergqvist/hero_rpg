@@ -1,7 +1,8 @@
 use game_screen;
 use http_method::HttpMethod;
+use config::Config;
 
-pub fn get_login_screen() -> game_screen::GameScreen {
+pub fn get_login_screen(config: &Config) -> game_screen::GameScreen {
   game_screen::GameScreen{
     message: String::from("Welcome to Hero Quest! What is your name?"),
     actions: vec!(
@@ -14,7 +15,7 @@ pub fn get_login_screen() -> game_screen::GameScreen {
             value: game_screen::FieldValue::Text(None)
           }
         ],
-        link: String::from("http://localhost:4000/login"),
+        link: format!("{}/login", config.base_url),
       },
     )
   }
