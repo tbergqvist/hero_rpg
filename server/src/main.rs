@@ -37,6 +37,7 @@ fn main() {
       root_endpoint::get_login_screen,
       root_endpoint::get_village,
       root_endpoint::login,
+      root_endpoint::logout,
       quests_endpoint::get_quests,
       quests_endpoint::accept_quest
     ])

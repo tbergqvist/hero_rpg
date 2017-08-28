@@ -2,6 +2,8 @@ use rocket::State;
 use rocket_contrib::Json;
 use rocket::http::Cookies;
 use rocket::http::Cookie;
+use rocket::http::Status;
+use rocket::response::Failure;
 
 use endpoints::commands;
 use game_screen;
@@ -40,4 +42,10 @@ pub fn login(body: Json<LoginBody>, state: State<TsGameState>, mut cookies: Cook
   Json(
     commands::get_village::get_village(&player_state, &config)
   )
+}
+
+#[post("/logout")]
+pub fn logout(config: State<Config>, mut cookies: Cookies) -> Json<game_screen::GameScreen> {
+  cookies.remove(Cookie::named("id"));
+  get_login_screen(config)
 }

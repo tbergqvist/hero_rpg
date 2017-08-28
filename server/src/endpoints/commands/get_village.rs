@@ -13,6 +13,12 @@ pub fn get_village(player_state: &TsPlayerState, config: &Config) -> game_screen
         fields: vec![],
         link: format!("{}/quests", config.base_url),
       },
+      game_screen::GameAction {
+        name: String::from("Logout"),
+        method: HttpMethod::Post,
+        fields: vec![],
+        link: format!("{}/logout", config.base_url),
+      },
     )
   }
 }
