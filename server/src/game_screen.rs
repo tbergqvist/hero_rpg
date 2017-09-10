@@ -8,6 +8,19 @@ pub struct GameScreen {
   pub actions: Vec<GameAction>
 }
 
+pub fn add_logout(mut game_screen: GameScreen, base_url: &String) -> GameScreen {
+  game_screen.actions.push(
+    GameAction {
+      name: String::from("Logout"),
+      method: HttpMethod::Post,
+      fields: vec![],
+      link: format!("{}/logout", base_url),
+    }
+  );
+
+  game_screen
+}
+
 #[derive(Serialize)]
 pub struct GameAction {
   pub name: String,

@@ -8,6 +8,13 @@ use game_state::TsGameState;
 use player_state::TsPlayerState;
 use config::Config;
 
+#[get("/", rank=1)]
+pub fn get_village(player_state: TsPlayerState, config: State<Config>) -> Json<game_screen::GameScreen> {
+  Json(
+    commands::get_village::get_village(&player_state, &config)
+  )
+}
+
 #[get("/quests")]
 pub fn get_quests(game_state: State<TsGameState>, player_state: TsPlayerState, config: State<Config>) -> Json<game_screen::GameScreen> {
   Json(

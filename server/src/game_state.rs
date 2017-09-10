@@ -41,4 +41,8 @@ impl GameState {
   pub fn get_quest(&self, quest_id: i32) -> Option<&Quest> {
     self.quests.iter().find(|quest| quest.id() == quest_id)
   }
+
+  pub fn get_enemy_templates(&self) -> &Vec<Enemy> {
+    &self.enemies
+  }
 }

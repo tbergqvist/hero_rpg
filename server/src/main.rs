@@ -6,7 +6,7 @@ extern crate rocket_contrib;
 extern crate rocket_cors;
 
 extern crate serde;
-extern crate serde_json;
+extern crate rand;
 
 mod endpoints;
 mod game_screen;
@@ -17,13 +17,13 @@ mod quest;
 mod enemy;
 mod thread_safe;
 mod config;
+mod battle;
 
 #[macro_use]
 extern crate serde_derive;
 
-use endpoints::{root_endpoint, quests_endpoint};
+use endpoints::{authentication_endpoint, village_endpoint, wilderness_endpoint};
 use rocket::fairing::AdHoc;
-
 
 fn main() {
   // You can also deserialize this
@@ -34,12 +34,14 @@ fn main() {
 
   rocket::ignite()
     .mount("/", routes![
-      root_endpoint::get_login_screen,
-      root_endpoint::get_village,
-      root_endpoint::login,
-      root_endpoint::logout,
-      quests_endpoint::get_quests,
-      quests_endpoint::accept_quest
+      authentication_endpoint::get_login_screen,
+      authentication_endpoint::login,
+      authentication_endpoint::logout,
+      village_endpoint::get_village,
+      village_endpoint::get_quests,
+      village_endpoint::accept_quest,
+      wilderness_endpoint::enter_wilderness,
+      wilderness_endpoint::fight,
     ])
     .attach(cors)
     .attach(AdHoc::on_attach(|rocket| {

@@ -2,13 +2,10 @@ use rocket::State;
 use rocket_contrib::Json;
 use rocket::http::Cookies;
 use rocket::http::Cookie;
-use rocket::http::Status;
-use rocket::response::Failure;
 
 use endpoints::commands;
 use game_screen;
 use game_state::TsGameState;
-use player_state::TsPlayerState;
 use config::Config;
 
 #[derive(Deserialize)]
@@ -16,17 +13,10 @@ pub struct LoginBody {
   pub username: String
 }
 
-#[get("/", rank=2)]
+#[get(path = "/", rank=2)]
 pub fn get_login_screen(config: State<Config>) -> Json<game_screen::GameScreen> {
   Json(
     commands::get_login_screen::get_login_screen(&config)
-  )
-}
-
-#[get("/", rank=1)]
-pub fn get_village(player_state: TsPlayerState, config: State<Config>) -> Json<game_screen::GameScreen> {
-  Json(
-    commands::get_village::get_village(&player_state, &config)
   )
 }
 

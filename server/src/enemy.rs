@@ -3,13 +3,17 @@ pub fn create_enemies() -> Vec<Enemy> {
     Enemy {
       id: 1,
       name: String::from("Rat"),
-      hp: 100
+      max_hp: 2,
+      current_hp: 2,
     }
   ]
 }
 
+#[derive(Clone)]
 pub struct Enemy {
-  id: i32,
-  name: String,
-  hp: i32
+  pub id: i32,
+  pub name: String,
+  pub max_hp: i32,
+  pub current_hp: i32,
 }
+

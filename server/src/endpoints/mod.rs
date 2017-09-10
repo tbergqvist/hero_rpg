@@ -1,3 +1,4 @@
 mod commands;
-pub mod quests_endpoint;
-pub mod root_endpoint;
+pub mod village_endpoint;
+pub mod authentication_endpoint;
+pub mod wilderness_endpoint;

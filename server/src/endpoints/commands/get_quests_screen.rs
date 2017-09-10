@@ -8,7 +8,7 @@ use config::Config;
 pub fn get_quests_screen(game_state: &TsGameState, player_state: &TsPlayerState, config: &Config) -> game_screen::GameScreen {
   let quests = get_acceptable_quests(&game_state, &player_state);
 
-  let actions = quests.iter().map(|quest| {
+  let mut actions: Vec<game_screen::GameAction> = quests.iter().map(|quest| {
     game_screen::GameAction {
       name: quest.name().clone(),
       method: HttpMethod::Post,
@@ -16,6 +16,14 @@ pub fn get_quests_screen(game_state: &TsGameState, player_state: &TsPlayerState,
       fields: vec![]
     }
   }).collect();
+
+  actions.push(
+    game_screen::GameAction {
+      name: format!("Back to village"),
+      method: HttpMethod::Get,
+      link: format!("{}/", config.base_url),
+      fields: vec![]
+  });
 
   game_screen::GameScreen{
     message: format!("Here are all the quests!"),
