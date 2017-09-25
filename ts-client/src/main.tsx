@@ -12,35 +12,67 @@ interface Field {
   value: string | number;
 }
 
-interface GameAction {
-  name: string;
-  method: Method;
-  link: string;
-  fields: Field[];
-}
-
-interface GameResponse {
-  message: string;
-  actions: GameAction[];
-}
-
 interface Link {
   method: Method;
   link: string;
   body?: any;
 }
 
-export function createGui(game: GameResponse, followLink: (link: Link)=>void) {
-  function requestNewState(event: Event, action: GameAction) {
+interface Text {
+  type: string;
+  value: string;
+}
+
+interface Form {
+  type: string;
+  name: string;
+  method: Method;
+  link: string;
+  fields: Field[];
+}
+
+function renderText(text: Text) {
+  return <div>{text.value}</div>;
+}
+
+function renderForm(form: Form, followLink: (link: Link)=>void) {
+  function requestNewState(event: Event, form: Form) {
     event.preventDefault();
-    followLink(Object.assign(action, {
-      body: action.fields.reduce((obj, field)=> {
+    followLink(Object.assign(form, {
+      body: form.fields.reduce((obj, field)=> {
         obj[field.name] = field.value;
         return obj;
       }, {})
     }));
   }
 
+  return (
+    <form onsubmit={(e)=>requestNewState(e, form)}>
+      {form.name}
+      {form.fields.map((field)=> {
+        return <input type={field.type} value={field.value} onchange={(event)=>field.value = event.target.value} />
+      })}
+      <button>Confirm</button>
+    </form>
+    );
+}
+
+function renderItem(item: GuiItem, followLink: (link: Link)=>void) {
+  switch(item.type) {
+    case "text": 
+      return renderText(item as Text);
+    case "form":
+      return renderForm(item as Form, followLink);
+  }
+}
+
+type GuiItem = Text | Form;
+
+export function createGui(game: GuiItem[], followLink: (link: Link)=>void) {
+  
+
+  let elements = game.map(i => renderItem(i, followLink));
+  /*
   let actions = game.actions.map((action) => {
     return (
     <form onsubmit={(e)=>requestNewState(e, action)}>
@@ -52,15 +84,13 @@ export function createGui(game: GameResponse, followLink: (link: Link)=>void) {
     </form>
     );
   });
+*/
 
   let gui = {
     render() {
       return (
       <div>
-        <span>{game.message}</span>
-        <div>
-          {actions}
-        </div>
+        {elements}
       </div>
       );
     },

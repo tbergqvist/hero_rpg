@@ -9,7 +9,8 @@ extern crate serde;
 extern crate rand;
 
 mod endpoints;
-mod game_screen;
+mod gui_item;
+mod common_actions;
 mod http_method;
 mod game_state;
 mod player_state;
